@@ -1,41 +1,33 @@
-Loaded 20960 trajectories from /tc3home/domi0015/Search-R1/trajectories.jsonl
-======================================================================
-
 RESULTS
 ──────────────────────────────────────────────────────────────────────
-  Total trajectories:    20960
-  Evaluable:             20960
+  Total trajectories:    19013
+  Evaluable:             19013
   Unevaluable (no GT):   0
-  Correct:               7786/20960 (37.1%)
-  Accuracy (evaluable):  7786/20960 (37.1%)
-  Average F1:            0.295
+  Correct:               7051/19013 (37.1%)
+  Accuracy (evaluable):  7051/19013 (37.1%)
+  Average F1:            0.294
 
   Match types (correct episodes):
-    exact: 4150
-    contains: 3636
+    exact: 3759
+    contains: 3292
 
   Failure modes:
-    wrong_answer: 10610
-    no_search: 2052
-    no_answer: 379
-    empty_search_results: 133
+    wrong_answer: 9645
+    no_search: 1854
+    no_answer: 343
+    empty_search_results: 120
 
   Search statistics:
-    Trajectories with search: 18299/20960
+    Trajectories with search: 16615/19013
     Avg searches/trajectory:  1.03
-    0 searches: 2661 trajectories
-    1 searches: 16102 trajectories
-    2 searches: 1166 trajectories
-    3 searches: 1031 trajectories
+    0 searches: 2398 trajectories
+    1 searches: 14615 trajectories
+    2 searches: 1067 trajectories
+    3 searches: 933 trajectories
 
   Correct vs Incorrect:
     Metric                        Correct        Incorrect
     ────────────────────────────────────────────────────────────
     Avg searches                  0.95           1.08
-    Avg F1                        0.653          0.083
-    % with search results         92.2          %83.4          %
-
-
-Saved 7786 successful to: /tc3home/domi0015/Search-R1/success_traj.jsonl
-Saved 13174 failed to: /tc3home/domi0015/Search-R1/failed_traj.jsonl
-======================================================================
+    Avg F1                        0.652          0.083
+    % with search results         92.3          %83.5          %

@@ -105,7 +105,7 @@ def f1_score(prediction, ground_truth):
 def main():
     parser = argparse.ArgumentParser(description="Verify trajectories")
     parser.add_argument('--path', type=str,
-                        default=os.path.expanduser('~/Search-R1/trajectories.jsonl'))
+                        default=os.path.expanduser('~/Search-R1/trajectories_unique.jsonl'))
     parser.add_argument('--show-failures', type=int, default=3,
                         help='Number of failure examples to print')
     args = parser.parse_args()
