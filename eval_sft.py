@@ -1,13 +1,16 @@
 """
 eval_sft.py — Evaluate SFT checkpoints with live search.
+Supports resuming from interrupted runs.
 
 Usage:
     CUDA_VISIBLE_DEVICES=3 python eval_sft.py \
         --adapter ./ckpt_a/final_adapter \
-        --questions eval_questions_50.jsonl \
-        --output ckpt_a_trajectories.jsonl
+        --questions eval_questions_500.jsonl \
+        --output eval_output/ckpt_a_trajectories.jsonl
 
-    python check_success.py --path ckpt_a_trajectories.jsonl
+    # If interrupted, just re-run the same command — it picks up where it left off.
+
+    python check_success.py --path eval_output/ckpt_a_trajectories.jsonl
 """
 
 import argparse
@@ -23,7 +26,7 @@ from peft import PeftModel
 # Config
 # ---------------------------------------------------------------------------
 MODEL_NAME = "Qwen/Qwen2.5-3B"
-RETRIEVER_URL = "http://127.0.0.1:8000/retrieve"
+RETRIEVER_URL = "http://127.0.0.1:8001/retrieve"
 TOPK = 3
 MAX_NEW_TOKENS = 500
 MAX_TURNS = 5
@@ -142,7 +145,7 @@ def main(args):
     model.to(device)
     model.eval()
 
-    # Load questions from JSONL (with prompt and ground_truth)
+    # Load questions from JSONL
     records = []
     with open(args.questions, "r") as f:
         for line in f:
@@ -151,6 +154,22 @@ def main(args):
                 records.append(json.loads(line))
 
     print(f"Loaded {len(records)} questions")
+
+    # Check how many are already completed (for resume)
+    completed = 0
+    if os.path.exists(args.output):
+        with open(args.output, "r") as f:
+            for line in f:
+                if line.strip():
+                    completed += 1
+        print(f"Resuming from question {completed}/{len(records)}")
+    else:
+        # Ensure output directory exists
+        os.makedirs(os.path.dirname(args.output) if os.path.dirname(args.output) else ".", exist_ok=True)
+
+    if completed >= len(records):
+        print("All questions already completed!")
+        return
 
     # Check retriever
     print(f"Testing retriever at {RETRIEVER_URL}...")
@@ -161,31 +180,32 @@ def main(args):
         print(f"  ERROR: Retriever not reachable: {e}")
         return
 
-    # Run evaluation
-    trajectories = []
-    for idx, rec in enumerate(records):
-        if idx % 10 == 0:
-            print(f"Processing {idx}/{len(records)}...")
+    # Run evaluation, appending one trajectory at a time
+    # Open in append mode so we don't overwrite completed results
+    mode = "a" if completed > 0 else "w"
+    with open(args.output, mode, encoding="utf-8") as out_f:
+        for idx in range(completed, len(records)):
+            rec = records[idx]
 
-        # Use the pre-formatted prompt, add trailing newline for generation
-        prompt = rec["prompt"] + "\n"
-        ground_truth = rec.get("ground_truth", "")
+            if idx % 10 == 0:
+                print(f"Processing {idx}/{len(records)}...")
 
-        steps, full_response = generate_with_search(model, tokenizer, prompt, device)
+            prompt = rec["prompt"] + "\n"
+            ground_truth = rec.get("ground_truth", "")
 
-        traj = {
-            "question": prompt,
-            "ground_truth": ground_truth,
-            "steps": steps,
-        }
-        trajectories.append(traj)
+            steps, full_response = generate_with_search(model, tokenizer, prompt, device)
 
-    # Save trajectories
-    with open(args.output, "w", encoding="utf-8") as f:
-        for traj in trajectories:
-            f.write(json.dumps(traj, ensure_ascii=False) + "\n")
+            traj = {
+                "question": prompt,
+                "ground_truth": ground_truth,
+                "steps": steps,
+            }
 
-    print(f"\nSaved {len(trajectories)} trajectories to {args.output}")
+            # Write immediately and flush — saved even if we crash
+            out_f.write(json.dumps(traj, ensure_ascii=False) + "\n")
+            out_f.flush()
+
+    print(f"\nDone! All {len(records)} trajectories saved to {args.output}")
     print(f"Run evaluation with:")
     print(f"  python check_success.py --path {args.output}")
 
