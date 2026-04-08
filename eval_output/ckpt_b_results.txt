@@ -1,0 +1,37 @@
+WARNING: Skipping malformed line 28: Expecting value: line 1 column 1 (char 0)
+Loaded 499 trajectories from eval_output/ckpt_b_trajectories.jsonl
+======================================================================
+
+RESULTS
+──────────────────────────────────────────────────────────────────────
+  Total trajectories:    499
+  Evaluable:             499
+  Unevaluable (no GT):   0
+  Correct:               180/499 (36.1%)
+  Accuracy (evaluable):  180/499 (36.1%)
+  Average F1:            0.349
+
+  Match types (correct episodes):
+    exact: 120
+    contains: 60
+
+  Failure modes:
+    wrong_answer: 240
+    no_search: 79
+
+  Search statistics:
+    Trajectories with search: 366/499
+    Avg searches/trajectory:  0.73
+    0 searches: 133 trajectories
+    1 searches: 366 trajectories
+
+  Correct vs Incorrect:
+    Metric                        Correct        Incorrect      
+    ────────────────────────────────────────────────────────────
+    Avg searches                  0.70           0.75           
+    Avg F1                        0.787          0.103          
+    % with search results         70.0          %75.2          %
+
+Saved 180 successful to: eval_output/success_traj.jsonl
+Saved 319 failed to: eval_output/failed_traj.jsonl
+======================================================================

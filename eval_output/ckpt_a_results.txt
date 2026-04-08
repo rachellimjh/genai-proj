@@ -1,0 +1,36 @@
+Loaded 500 trajectories from eval_output/ckpt_a_trajectories.jsonl
+======================================================================
+
+RESULTS
+──────────────────────────────────────────────────────────────────────
+  Total trajectories:    500
+  Evaluable:             500
+  Unevaluable (no GT):   0
+  Correct:               151/500 (30.2%)
+  Accuracy (evaluable):  151/500 (30.2%)
+  Average F1:            0.238
+
+  Match types (correct episodes):
+    exact: 78
+    contains: 73
+
+  Failure modes:
+    wrong_answer: 293
+    no_search: 56
+
+  Search statistics:
+    Trajectories with search: 396/500
+    Avg searches/trajectory:  0.79
+    0 searches: 104 trajectories
+    1 searches: 396 trajectories
+
+  Correct vs Incorrect:
+    Metric                        Correct        Incorrect      
+    ────────────────────────────────────────────────────────────
+    Avg searches                  0.68           0.84           
+    Avg F1                        0.661          0.055          
+    % with search results         68.2          %84.0          %
+
+Saved 151 successful to: eval_output/success_traj.jsonl
+Saved 349 failed to: eval_output/failed_traj.jsonl
+======================================================================
