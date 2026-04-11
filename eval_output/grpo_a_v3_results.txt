@@ -1,0 +1,36 @@
+Loaded 500 trajectories from eval_output/grpo_a_trajectories_v3.jsonl
+======================================================================
+
+RESULTS
+──────────────────────────────────────────────────────────────────────
+  Total trajectories:    500
+  Evaluable:             500
+  Unevaluable (no GT):   0
+  Correct:               132/500 (26.4%)
+  Accuracy (evaluable):  132/500 (26.4%)
+  Average F1:            0.303
+
+  Match types (correct episodes):
+    exact: 103
+    contains: 29
+
+  Failure modes:
+    wrong_answer: 320
+    no_search: 48
+
+  Search statistics:
+    Trajectories with search: 437/500
+    Avg searches/trajectory:  0.87
+    0 searches: 63 trajectories
+    1 searches: 437 trajectories
+
+  Correct vs Incorrect:
+    Metric                        Correct        Incorrect      
+    ────────────────────────────────────────────────────────────
+    Avg searches                  0.89           0.87           
+    Avg F1                        0.855          0.106          
+    % with search results         88.6          %87.0          %
+
+Saved 132 successful to: eval_output/success_traj.jsonl
+Saved 368 failed to: eval_output/failed_traj.jsonl
+======================================================================
